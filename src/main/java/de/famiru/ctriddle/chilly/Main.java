@@ -1,5 +1,7 @@
 package de.famiru.ctriddle.chilly;
 
+import de.famiru.ctriddle.chilly.layer1.DijkstraSolver;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +25,7 @@ public class Main {
 
         BoardFactory.BoardAndPlayer boardAndPlayer = new BoardFactory().loadLevel(rows, wormholes);
 
-        Solver solver = new Solver(boardAndPlayer.board(), boardAndPlayer.playerX(), boardAndPlayer.playerY());
-        solver.createGraph();
+        DijkstraSolver dijkstraSolver = new DijkstraSolver(boardAndPlayer.board(), boardAndPlayer.playerX(), boardAndPlayer.playerY());
+        dijkstraSolver.createGraph();
     }
 }
