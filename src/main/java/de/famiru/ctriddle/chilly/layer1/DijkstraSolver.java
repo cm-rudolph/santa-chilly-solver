@@ -80,21 +80,22 @@ public class DijkstraSolver {
                 return target.getDistance();
             }
 
-            checkAndUpdate(queue, node.getUp(), node);
-            checkAndUpdate(queue, node.getDown(), node);
-            checkAndUpdate(queue, node.getRight(), node);
-            checkAndUpdate(queue, node.getLeft(), node);
+            checkAndUpdate(queue, node.getUp(), node, 'U');
+            checkAndUpdate(queue, node.getDown(), node, 'D');
+            checkAndUpdate(queue, node.getRight(), node, 'R');
+            checkAndUpdate(queue, node.getLeft(), node, 'L');
         }
         return Constants.INFINITY;
     }
 
-    private void checkAndUpdate(PriorityQueue<Node> queue, Node target, Node node) {
+    private void checkAndUpdate(PriorityQueue<Node> queue, Node target, Node node, char direction) {
         if (target != null && !target.isVisited()
                 && node.getDistance() < Constants.INFINITY // skip nodes that aren't reachable at all
                 && target.getDistance() > node.getDistance() + 1) {
             queue.remove(target);
             target.setDistance(node.getDistance() + 1);
             target.setPrevious(node);
+            target.setPreviousDirection(direction);
             queue.add(target);
         }
     }
