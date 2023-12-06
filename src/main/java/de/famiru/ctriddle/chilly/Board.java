@@ -1,5 +1,7 @@
 package de.famiru.ctriddle.chilly;
 
+import lombok.Getter;
+
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,12 +11,15 @@ public class Board {
     private final Map<Coordinates, Coordinates> wormholes;
     private final int width;
     private final int height;
+    @Getter
+    private final Coordinates exit;
 
     Board(FieldValue[][] field, Map<Coordinates, Coordinates> wormholes) {
         this.field = field;
         this.width = field.length;
         this.height = field[0].length;
         this.wormholes = wormholes;
+        this.exit = findExit();
     }
 
     public boolean canMoveUp(int playerX, int playerY) {
@@ -145,11 +150,22 @@ public class Board {
         return Optional.empty();
     }
 
+    public boolean isExit(int x, int y) {
+        return getAt(x, y) == FieldValue.EXIT;
+    }
+
     private FieldValue getAt(int x, int y) {
         return field[(x + width) % width][(y + height) % height];
     }
 
-    public boolean isExit(int x, int y) {
-        return getAt(x, y) == FieldValue.EXIT;
+    private Coordinates findExit() {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (isExit(x, y)) {
+                    return new Coordinates(x, y);
+                }
+            }
+        }
+        throw new IllegalArgumentException("The board doesn't have any exit.");
     }
 }

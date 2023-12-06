@@ -11,6 +11,10 @@ public class AllNodes {
     // wenn hier ein Knoten eingefügt wird und die Liste nicht leer ist, dann wird der neue Knoten einfach ergänzt
     private final Map<Coordinates, Set<Node>> coinNodes = new HashMap<>();
 
+    public Set<Node> getNodesAt(int x, int y) {
+        return Set.copyOf(nodes.getOrDefault(new Coordinates(x, y), Set.of()));
+    }
+
     /**
      * @return true, if the node is the first one at its coordinates
      */
