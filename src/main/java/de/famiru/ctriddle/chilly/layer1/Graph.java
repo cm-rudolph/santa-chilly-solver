@@ -85,6 +85,19 @@ class Graph {
                 .toList();
     }
 
+    public List<Node> getAllCoinNodes() {
+        return coinNodes.values().stream()
+                .flatMap(Collection::stream)
+                .toList();
+    }
+
+    public List<List<Node>> getCoinNodeClusters() {
+        return coinNodes.values().stream()
+                .filter(set -> set.size() > 1)
+                .map(set -> (List<Node>) new ArrayList<>(set))
+                .toList();
+    }
+
     public void reset() {
         nodes.values().stream()
                 .flatMap(Collection::stream)

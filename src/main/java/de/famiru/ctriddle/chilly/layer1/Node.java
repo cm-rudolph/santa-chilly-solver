@@ -22,6 +22,7 @@ class Node {
     private Node previous;
     private String path;
     private boolean visited;
+    private int index;
 
     public Node(int x, int y) {
         this(x, y, -1, -1);
@@ -32,6 +33,7 @@ class Node {
         this.y = y;
         this.coinX = coinX;
         this.coinY = coinY;
+        this.index = -1;
         reset();
     }
 
@@ -48,6 +50,14 @@ class Node {
 
     public void markVisited() {
         visited = true;
+    }
+
+    public String getDescription() {
+        String target = String.format("(%d,%d)", x, y);
+        if (coinX < 0) {
+            return target;
+        }
+        return target + String.format(" C(%d,%d)", coinX, coinY);
     }
 
     @Override
