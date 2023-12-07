@@ -20,7 +20,7 @@ class Node {
     private Node left;
     private int distance;
     private Node previous;
-    private char previousDirection;
+    private String path;
     private boolean visited;
 
     public Node(int x, int y) {
@@ -43,7 +43,7 @@ class Node {
         previous = null;
         distance = Constants.INFINITY;
         visited = false;
-        previousDirection = 'X';
+        path = "";
     }
 
     public void markVisited() {

@@ -95,7 +95,7 @@ public class DijkstraSolver {
             queue.remove(target);
             target.setDistance(node.getDistance() + 1);
             target.setPrevious(node);
-            target.setPreviousDirection(direction);
+            target.setPath(node.getPath() + direction);
             queue.add(target);
         }
     }
