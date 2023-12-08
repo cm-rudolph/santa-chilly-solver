@@ -47,4 +47,8 @@ public class Matrix {
         paths[i1] = paths[i2];
         paths[i2] = pathBuf;
     }
+
+    int getEntry(int i, int j) {
+        return entries[i][j];
+    }
 }

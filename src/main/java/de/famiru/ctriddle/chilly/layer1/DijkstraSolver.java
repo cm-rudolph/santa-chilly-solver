@@ -4,14 +4,10 @@ import de.famiru.ctriddle.chilly.Board;
 import de.famiru.ctriddle.chilly.Constants;
 import de.famiru.ctriddle.chilly.Coordinates;
 import de.famiru.ctriddle.chilly.layer2.Matrix;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
 public class DijkstraSolver {
-    private static final Logger LOGGER = LogManager.getLogger(DijkstraSolver.class);
-
     private final Board board;
     private final Graph graph;
     private final int playerX;
@@ -24,7 +20,7 @@ public class DijkstraSolver {
         this.graph = new GraphCreator().create(board, playerX, playerY);
     }
 
-    public Matrix createMatrix() {
+    public Matrix createAtspMatrix() {
         Node startNode = getStartNode();
         Set<Node> exitNodes = getExitNodes();
 

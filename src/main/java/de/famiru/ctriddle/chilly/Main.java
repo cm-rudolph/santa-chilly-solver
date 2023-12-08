@@ -2,6 +2,7 @@ package de.famiru.ctriddle.chilly;
 
 import de.famiru.ctriddle.chilly.layer1.DijkstraSolver;
 import de.famiru.ctriddle.chilly.layer2.Matrix;
+import de.famiru.ctriddle.chilly.layer2.TspFileWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +35,17 @@ public class Main {
 
         DijkstraSolver dijkstraSolver =
                 new DijkstraSolver(boardAndPlayer.board(), boardAndPlayer.playerX(), boardAndPlayer.playerY());
-        Matrix matrix = dijkstraSolver.createMatrix();
-        LOGGER.info("{}", matrix.getDimension());
+        Matrix matrix = dijkstraSolver.createAtspMatrix();
+
+        new TspFileWriter().writeTspFile("chilly.tsp", matrix);
+        LOGGER.info("Please pass chilly.tsp to a solver able to handle files in TSPLIB format.");
+        LOGGER.info("Place the solution as file chilly.sol into the working dir and press enter.");
+        System.in.read();
+        if (!Files.isRegularFile(Path.of("chilly.sol"))) {
+            LOGGER.error("File not found. Did you place chilly.sol in the working directory?");
+            return;
+        }
+
+
     }
 }
