@@ -14,12 +14,8 @@ public class AtspToTspTransformer {
                 tspMatrix.setEntry(i + dimension, j + dimension, Constants.INFINITY);
 
                 if (i != j) {
-                    if (atspMatrix.getEntry(i, j) < Constants.INFINITY) {
-                        tspMatrix.setEntry(i + dimension, j, atspMatrix.getEntry(i, j) + 200);
-                    }
-                    if (atspMatrix.getEntry(j, i) < Constants.INFINITY) {
-                        tspMatrix.setEntry(i, j + dimension, atspMatrix.getEntry(j, i) + 200);
-                    }
+                    tspMatrix.setEntry(i + dimension, j, atspMatrix.getEntry(i, j) + 200);
+                    tspMatrix.setEntry(i, j + dimension, atspMatrix.getEntry(j, i) + 200);
                 }
             }
         }

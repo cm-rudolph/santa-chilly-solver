@@ -21,17 +21,18 @@ public class TspFileWriter {
             int counter = 0;
             for (int i = 0; i < matrix.getDimension(); i++) {
                 for (int j = 0; j < matrix.getDimension(); j++) {
-                    writer.print(String.format(" %9d", matrix.getEntry(i, j)));
+                    writer.print(String.format(" %8d", matrix.getEntry(i, j)));
 
                     counter++;
                     counter %= 7;
                     if (counter == 0) {
-                        writer.println();
+                        //writer.println();
                     }
                 }
+                writer.println();
             }
             if (counter != 0) {
-                writer.println();
+                //writer.println();
             }
 
             writer.println("EOF");

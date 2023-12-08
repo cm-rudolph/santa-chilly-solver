@@ -30,6 +30,14 @@ public class Matrix {
         descriptions[i] = description;
     }
 
+    public String getDescription(int i) {
+        return descriptions[i];
+    }
+
+    public String getPath(int i, int j) {
+        return paths[i][j];
+    }
+
     public void setEntry(int i, int j, int value) {
         entries[i][j] = value;
     }

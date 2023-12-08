@@ -2,6 +2,7 @@ package de.famiru.ctriddle.chilly;
 
 import de.famiru.ctriddle.chilly.layer1.DijkstraSolver;
 import de.famiru.ctriddle.chilly.layer2.Matrix;
+import de.famiru.ctriddle.chilly.layer2.SolutionParser;
 import de.famiru.ctriddle.chilly.layer2.TspFileWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,6 +47,24 @@ public class Main {
             return;
         }
 
+        List<Integer> path = new SolutionParser().parseSolution("chilly.sol");
 
+        StringBuilder sb = new StringBuilder();
+        for (int j = 0; j < path.size(); j++) {
+            int i = path.get(j);
+            if (j > 0) {
+                String fragment = matrix.getPath(path.get(j - 1) % matrix.getDimension(), i % matrix.getDimension());
+                if (!fragment.startsWith("cluster") && !fragment.startsWith("exit")) {
+                    sb.append(fragment);
+                }
+                LOGGER.debug("{}", fragment);
+            }
+            if (i >= matrix.getDimension()) {
+                LOGGER.debug("{}# {}", i % matrix.getDimension(), matrix.getDescription(i % matrix.getDimension()));
+            } else {
+                LOGGER.debug("{}: {}", i, matrix.getDescription(i));
+            }
+        }
+        LOGGER.info("Solution (length {}): {}", sb.length(), sb.toString());
     }
 }
