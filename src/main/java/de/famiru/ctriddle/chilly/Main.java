@@ -3,6 +3,7 @@ package de.famiru.ctriddle.chilly;
 import de.famiru.ctriddle.chilly.layer1.DijkstraSolver;
 import de.famiru.ctriddle.chilly.layer2.Matrix;
 import de.famiru.ctriddle.chilly.layer2.SolutionParser;
+import de.famiru.ctriddle.chilly.layer2.SolutionValidator;
 import de.famiru.ctriddle.chilly.layer2.TspFileWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Main {
@@ -49,12 +51,27 @@ public class Main {
 
         List<Integer> path = new SolutionParser().parseSolution("chilly.sol");
 
+        SolutionValidator validator = new SolutionValidator();
+        if (!validator.isValidSolution(matrix, path)) {
+            // possibly the solution is simply the wrong way around
+            Collections.reverse(path);
+        }
+        if (!validator.isValidSolution(matrix, path)) {
+            LOGGER.error("The solution is not valid.");
+            return;
+        }
+
+        StringBuilder sb = createInstructions(path, matrix);
+        LOGGER.info("Solution (length {}): {}", sb.length(), sb.toString());
+    }
+
+    private static StringBuilder createInstructions(List<Integer> path, Matrix matrix) {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < path.size(); j++) {
             int i = path.get(j);
             if (j > 0) {
                 String fragment = matrix.getPath(path.get(j - 1) % matrix.getDimension(), i % matrix.getDimension());
-                if (!fragment.startsWith("cluster") && !fragment.startsWith("exit")) {
+                if (!fragment.startsWith("cluster") && !fragment.equals(Constants.EXIT_TO_START_PATH)) {
                     sb.append(fragment);
                 }
                 LOGGER.debug("{}", fragment);
@@ -65,6 +82,6 @@ public class Main {
                 LOGGER.debug("{}: {}", i, matrix.getDescription(i));
             }
         }
-        LOGGER.info("Solution (length {}): {}", sb.length(), sb.toString());
+        return sb;
     }
 }

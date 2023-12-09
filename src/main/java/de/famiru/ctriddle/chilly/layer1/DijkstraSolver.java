@@ -82,19 +82,19 @@ public class DijkstraSolver {
     private void connectExitWithStart(Matrix matrix, Node startNode, Set<Node> exitNodes) {
         int startNodeIndex = startNode.getIndex();
         for (Node exitNode : exitNodes) {
-            matrix.setPath(exitNode.getIndex(), startNodeIndex, "exit to start");
+            matrix.setPath(exitNode.getIndex(), startNodeIndex, Constants.EXIT_TO_START_PATH);
             matrix.setEntry(exitNode.getIndex(), startNodeIndex, 0);
         }
     }
 
     private Node getStartNode() {
         Set<Node> startNodes = graph.getNodesAt(playerX, playerY);
-        if (startNodes.size() != 1) {
-            throw new IllegalArgumentException("The solver doesn't support start coordinates which are reachable " +
-                    "for the player.");
+        for (Node startNode : startNodes) {
+            if (!startNode.hasCoin()) {
+                return startNode;
+            }
         }
-
-        return startNodes.iterator().next();
+        throw new IllegalArgumentException("There is no start node.");
     }
 
     private Set<Node> getExitNodes() {

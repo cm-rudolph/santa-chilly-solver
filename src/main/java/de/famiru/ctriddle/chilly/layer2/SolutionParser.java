@@ -31,12 +31,13 @@ public class SolutionParser {
 
         if (result.get(0) + 1 != result.size()) {
             LOGGER.warn("First number isn't the number of nodes.");
+        } else {
+            result.remove(0);
         }
 
-        result.remove(0);
-        // as the transformed matrix represents a symmetric TSP, the solver might walk through the arcs in the opposite
-        // order. Then reversing the path is necessary.
-        Collections.reverse(result);
+        // close the cycle
+        result.add(result.get(0));
+
         return result;
     }
 
