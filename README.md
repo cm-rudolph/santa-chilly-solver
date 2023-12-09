@@ -1,0 +1,68 @@
+# Solver für das Santa-Chilly-Rätsel
+
+Das Rätsel wurde in c’t 28/2023 gestellt und der Code dazu befindet sich im folgenden Repository:
+[https://github.com/607011/chilly/](https://github.com/607011/chilly/)
+
+## Problemanalyse
+
+Das Problem ist ein Problem des Handlungsreisenden (TSP). Dabei sind die einzusammelnden Geschenke die Städte und die 
+Spielfigur Chilly ist der Handelsreisende. Die Distanzen der Städte untereinander entspricht der Anzahl Züge, 
+die gemacht werden müssen, um von einem zum nächsten Geschenk zu gelangen.
+
+### Herausforderungen
+
+* Durch das Rutschen der Spielfigur sind die Züge asymmetrisch. Die Distanz von Geschenk A zu Geschenk B ist in der 
+  Regel eine andere als von Geschenk B zu Geschenk A.
+* Die Spielfigur bleibt nur in wenigen Fällen direkt auf dem Geschenk stehen. Ein Geschenk kann aus unterschiedlichen
+  Richtungen eingesammelt werden, wodurch sich die Position der Figur nach dem Einsammeln verändert und damit auch die
+  folgenden Züge.
+
+### Modell
+
+Um die Herausforderungen zu bewältigen, wird das Problem als
+[asymmetrisches Problem](https://de.wikipedia.org/wiki/Problem_des_Handlungsreisenden#Asymmetrisches_und_symmetrisches_TSP)
+des Handlungsreisenden modelliert, bei dem die Kanten zwischen den Städten gerichtet sind.
+
+Um die Problematik der abweichenden Spielerpositionen nach dem Einsammeln eines Geschenkes aus einer anderen Richtung
+zu lösen, werden unterschiedliche Endpositionen nach dem Einsammeln einer Münze als Städtecluster betrachtet. Im
+Allgemeinen spricht man in so einem Fall von einem
+[verallgemeinerten TSP](https://de.wikipedia.org/wiki/Problem_des_Handlungsreisenden#St%C3%A4dtecluster).
+
+### Umsetzung
+
+Einen Solver für das TSP zu realisieren würde den zur Verfügung stehenden Zeitrahmen sprengen. Daher wird das Problem
+in eine [TSPLIB-Datei](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp95.pdf) überführt. Diese kann dann von 
+einem Solver, wie beispielsweise [concorde](https://www.math.uwaterloo.ca/tsp/concorde/) eingelesen werden. Nachdem
+concordemit der [QSopt-Bibliothek](https://www.math.uwaterloo.ca/~bico/qsopt/)
+[compiliert](https://www.math.uwaterloo.ca/tsp/concorde/DOC/README.html) wurde, kann mittels 
+`concorde chilly.tsp` eine Datei `chilly.sol` erstellt werden, die dann wiederum durch dieses Projekt eingelesen wird.
+
+concorde ist für akademische Forschungszwecke frei verwendbar. Dankenswerterweise wurde durch William Cook, dem
+Lizenzhalter von concorde, die Nutzung und Referenzierung im Rahmen der Chilly-Challenge genehmigt.
+
+#### Transformation
+
+1. Mit einer Simulation des Spieles wird ein Graph aller möglicher Züge erstellt. Dabei werden Züge, bei denen Geschenke
+   eingesammelt werden, separat erfasst. Hieraus lassen sich später die Informationen zu den "Städteclustern" auslesen.
+2. Die kürzesten Wege zwischen allen Geschenken werden dann mittels
+   [Dijkstra-Algorighmus](https://de.wikipedia.org/wiki/Dijkstra-Algorithmus) ermittelt. Hieraus entsteht ein
+   reduzierter Graph, bei dem die Geschenke die Knoten und die Anzahl Schritte innerhalb des ersten Graphen die 
+   Kantengewichte darstellen. Er repräsentiert ein verallgemeinertes Problem des Handlungsreisenden.
+3. Um die Cluster zu entfernen, damit ein allgemeiner TSP-Solver eingesetzt werden kann, werden die Knoten eines
+   Clusters mit Kanten vom Gewicht 0 verbunden und dann die ausgehenden Kanten der Knoten verschoben. Das Vorgehen ist
+   auf der entsprechenden [Wikipedia-Seite](https://en.wikipedia.org/wiki/Set_TSP_problem) einfach geschildert.
+4. Da nicht alle TSP-Solver auch das asymmertische TSP lösen können, wird die (asymmetrische) Matrix nach dem Verfahren 
+   von Volgenant und Jonker (ebenfalls auf einer 
+   [Wikipedia-Seite](https://en.wikipedia.org/wiki/Travelling_salesman_problem#Conversion_to_symmetric) kurz 
+   beschrieben) in eine symmetrische Matrix mit doppelter Zeilen-/Spaltenzahl überführt. Diese Matrix wird dann in die
+   Datei `chilly.tsp` geschrieben.
+
+### Lösung
+
+Nachdem der in der Datei [level.txt](src/main/resources/level.txt) beschriebene Level durch die Anwendung in die Datei
+[chilly.tsp](chilly.tsp) überführt wurde, danach ein TSP-Solver das Problem gelöst und die Datei 
+[chilly.sol](chilly.sol) erstellt hat, gibt die Anwendung folgende Lösung mit 110 Zügen aus:
+
+```text
+LURDLDLULULDRURUDLDLRUDRURULRULDLURDULURDLULULRULURDLDLURULDLDRULDDUDULRRDLDLRULURURURDLRURDRDRDRDRURLDLDRDLDR
+```
