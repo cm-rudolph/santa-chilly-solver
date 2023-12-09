@@ -1,9 +1,5 @@
 package de.famiru.ctriddle.chilly;
 
-import de.famiru.ctriddle.chilly.Board;
-import de.famiru.ctriddle.chilly.LevelParser;
-import de.famiru.ctriddle.chilly.LevelValidityChecker;
-
 import java.util.List;
 
 public class BoardFactory {

@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class Board {
-    // 0: empty field, 1: obstacle, 2: coin, 3: hole, 4: exit
     private final FieldValue[][] field;
     private final Map<Coordinates, Coordinates> wormholes;
     private final int width;

@@ -18,21 +18,11 @@ public class TspFileWriter {
             writer.println("EDGE_WEIGHT_FORMAT: FULL_MATRIX");
             writer.println("EDGE_WEIGHT_SECTION");
 
-            int counter = 0;
             for (int i = 0; i < matrix.getDimension(); i++) {
                 for (int j = 0; j < matrix.getDimension(); j++) {
                     writer.print(String.format(" %8d", matrix.getEntry(i, j)));
-
-                    counter++;
-                    counter %= 7;
-                    if (counter == 0) {
-                        //writer.println();
-                    }
                 }
                 writer.println();
-            }
-            if (counter != 0) {
-                //writer.println();
             }
 
             writer.println("EOF");

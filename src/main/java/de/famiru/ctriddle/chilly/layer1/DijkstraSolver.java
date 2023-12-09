@@ -117,10 +117,6 @@ public class DijkstraSolver {
 
             for (int j = 0; j < allNodes.size(); j++) {
                 Node nodeJ = allNodes.get(j);
-                //if (isExitNode || startNode.equals(nodeJ)) {
-                //    result.setEntry(i, j, Constants.INFINITY);
-                //    continue;
-                //}
                 int distance = distance(nodeI, nodeJ);
                 result.setEntry(i, j, distance);
                 result.setPath(i, j, nodeJ.getPath());
