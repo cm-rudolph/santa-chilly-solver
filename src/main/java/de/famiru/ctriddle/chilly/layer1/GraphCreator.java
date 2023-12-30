@@ -72,8 +72,17 @@ class GraphCreator {
         for (Node presentNode : presentNodes) {
             if (presentNode.equals(node)) {
                 return presentNode;
+            } else {
+                copyArcs(presentNode, node);
             }
         }
         return node;
+    }
+
+    private void copyArcs(Node source, Node destination) {
+        destination.setRight(source.getRight());
+        destination.setDown(source.getDown());
+        destination.setLeft(source.getLeft());
+        destination.setUp(source.getUp());
     }
 }

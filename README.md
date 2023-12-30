@@ -61,8 +61,8 @@ Lizenzhalter von concorde, die Nutzung und Referenzierung im Rahmen der Chilly-C
 
 Nachdem der in der Datei [level.txt](src/main/resources/level.txt) beschriebene Level durch die Anwendung in die Datei
 [chilly.tsp](chilly.tsp) überführt wurde, danach ein TSP-Solver das Problem gelöst und die Datei 
-[chilly.sol](chilly.sol) erstellt hat, gibt die Anwendung folgende Lösung mit 110 Zügen aus:
+[chilly.sol](chilly.sol) erstellt hat, gibt die Anwendung folgende Lösung mit 103 Zügen aus:
 
 ```text
-LURDLDLULULDRURUDLDLRUDRURULRULDLURDULURDLULULRULURDLDLURULDLDRULDDUDULRRDLDLRULURURURDLRURDRDRDRDRURLDLDRDLDR
+RULDLDLDULRUDDLULDLULULULULDLRULURDLDLURULDLDRDLDLDLDRULDLULULDRURUDLDLRUDRULDRDLRURDRDRDRDRURLDLDRDLDR
 ```
