@@ -40,35 +40,39 @@ class Graph {
         set.add(node);
     }
 
-    public void updateUp(int x, int y, Node node) {
+    public void updateUp(int x, int y, Node node, int distance) {
         GraphCoordinates coordinates = new GraphCoordinates(x, y);
         Set<Node> set = nodes.get(coordinates);
         for (Node currentNode : set) {
             currentNode.setUp(node);
+            currentNode.setCostUp(distance);
         }
     }
 
-    public void updateDown(int x, int y, Node node) {
+    public void updateDown(int x, int y, Node node, int distance) {
         GraphCoordinates coordinates = new GraphCoordinates(x, y);
         Set<Node> set = nodes.get(coordinates);
         for (Node currentNode : set) {
             currentNode.setDown(node);
+            currentNode.setCostDown(distance);
         }
     }
 
-    public void updateRight(int x, int y, Node node) {
+    public void updateRight(int x, int y, Node node, int distance) {
         GraphCoordinates coordinates = new GraphCoordinates(x, y);
         Set<Node> set = nodes.get(coordinates);
         for (Node currentNode : set) {
             currentNode.setRight(node);
+            currentNode.setCostRight(distance);
         }
     }
 
-    public void updateLeft(int x, int y, Node node) {
+    public void updateLeft(int x, int y, Node node, int distance) {
         GraphCoordinates coordinates = new GraphCoordinates(x, y);
         Set<Node> set = nodes.get(coordinates);
         for (Node currentNode : set) {
             currentNode.setLeft(node);
+            currentNode.setCostLeft(distance);
         }
     }
 

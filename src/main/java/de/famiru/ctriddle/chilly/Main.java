@@ -61,12 +61,13 @@ public class Main {
             return;
         }
 
-        StringBuilder sb = createInstructions(path, matrix);
-        LOGGER.info("Solution (length {}): {}", sb.length(), sb.toString());
+        InstructionsAndDistance iad = findInstructionsAndDistance(path, matrix);
+        LOGGER.info("Solution (moves {}, distance {}): {}", iad.moves(), iad.distance(), iad.instructions());
     }
 
-    private static StringBuilder createInstructions(List<Integer> path, Matrix matrix) {
+    private static InstructionsAndDistance findInstructionsAndDistance(List<Integer> path, Matrix matrix) {
         StringBuilder sb = new StringBuilder();
+        int totalDistance = 0;
         for (int j = 0; j < path.size(); j++) {
             int i = path.get(j);
             if (j > 0) {
@@ -74,7 +75,9 @@ public class Main {
                 if (!fragment.startsWith("cluster") && !fragment.equals(Constants.EXIT_TO_START_PATH)) {
                     sb.append(fragment);
                 }
-                LOGGER.debug("{}", fragment);
+                int distance = matrix.getEntry(path.get(j - 1) % matrix.getDimension(), i % matrix.getDimension());
+                totalDistance += distance;
+                LOGGER.debug("{} ({})", fragment, distance);
             }
             if (i >= matrix.getDimension()) {
                 LOGGER.debug("{}# {}", i % matrix.getDimension(), matrix.getDescription(i % matrix.getDimension()));
@@ -82,6 +85,12 @@ public class Main {
                 LOGGER.debug("{}: {}", i, matrix.getDescription(i));
             }
         }
-        return sb;
+        return new InstructionsAndDistance(sb.toString(), totalDistance);
+    }
+
+    private record InstructionsAndDistance(String instructions, int distance) {
+        int moves() {
+            return instructions.length();
+        }
     }
 }

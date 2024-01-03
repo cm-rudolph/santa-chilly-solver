@@ -142,20 +142,20 @@ public class DijkstraSolver {
                 return target.getDistance();
             }
 
-            checkAndUpdate(queue, node.getUp(), node, 'U');
-            checkAndUpdate(queue, node.getDown(), node, 'D');
-            checkAndUpdate(queue, node.getRight(), node, 'R');
-            checkAndUpdate(queue, node.getLeft(), node, 'L');
+            checkAndUpdate(queue, node.getUp(), node, 'U', node.getCostUp());
+            checkAndUpdate(queue, node.getDown(), node, 'D', node.getCostDown());
+            checkAndUpdate(queue, node.getRight(), node, 'R', node.getCostRight());
+            checkAndUpdate(queue, node.getLeft(), node, 'L', node.getCostLeft());
         }
         return Constants.INFINITY;
     }
 
-    private void checkAndUpdate(PriorityQueue<Node> queue, Node target, Node node, char direction) {
+    private void checkAndUpdate(PriorityQueue<Node> queue, Node target, Node node, char direction, int cost) {
         if (target != null && !target.isVisited()
                 && node.getDistance() < Constants.INFINITY // skip nodes that aren't reachable at all
-                && target.getDistance() > node.getDistance() + 1) {
+                && target.getDistance() > node.getDistance() + cost) {
             queue.remove(target);
-            target.setDistance(node.getDistance() + 1);
+            target.setDistance(node.getDistance() + cost);
             target.setPrevious(node);
             target.setPath(node.getPath() + direction);
             queue.add(target);

@@ -21,40 +21,44 @@ class GraphCreator {
         }
 
         if (board.canMoveRight(x, y)) {
-            Coordinates coordinates = board.moveRight(x, y);
+            Board.CoordinatesAndDistance cad = board.moveRight(x, y);
+            Coordinates coordinates = cad.coordinates();
             Coordinates coin = board.coinAtMoveRight(x, y).orElse(null);
             Node node = create(graph, coordinates, coin);
-            graph.updateRight(x, y, node);
+            graph.updateRight(x, y, node, cad.distance());
             if (graph.insertNode(node)) {
                 insertNode(board, graph, coordinates.x(), coordinates.y());
             }
         }
 
         if (board.canMoveLeft(x, y)) {
-            Coordinates coordinates = board.moveLeft(x, y);
+            Board.CoordinatesAndDistance cad = board.moveLeft(x, y);
+            Coordinates coordinates = cad.coordinates();
             Coordinates coin = board.coinAtMoveLeft(x, y).orElse(null);
             Node node = create(graph, coordinates, coin);
-            graph.updateLeft(x, y, node);
+            graph.updateLeft(x, y, node, cad.distance());
             if (graph.insertNode(node)) {
                 insertNode(board, graph, coordinates.x(), coordinates.y());
             }
         }
 
         if (board.canMoveUp(x, y)) {
-            Coordinates coordinates = board.moveUp(x, y);
+            Board.CoordinatesAndDistance cad = board.moveUp(x, y);
+            Coordinates coordinates = cad.coordinates();
             Coordinates coin = board.coinAtMoveUp(x, y).orElse(null);
             Node node = create(graph, coordinates, coin);
-            graph.updateUp(x, y, node);
+            graph.updateUp(x, y, node, cad.distance());
             if (graph.insertNode(node)) {
                 insertNode(board, graph, coordinates.x(), coordinates.y());
             }
         }
 
         if (board.canMoveDown(x, y)) {
-            Coordinates coordinates = board.moveDown(x, y);
+            Board.CoordinatesAndDistance cad = board.moveDown(x, y);
+            Coordinates coordinates = cad.coordinates();
             Coordinates coin = board.coinAtMoveDown(x, y).orElse(null);
             Node node = create(graph, coordinates, coin);
-            graph.updateDown(x, y, node);
+            graph.updateDown(x, y, node, cad.distance());
             if (graph.insertNode(node)) {
                 insertNode(board, graph, coordinates.x(), coordinates.y());
             }

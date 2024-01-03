@@ -18,6 +18,10 @@ class Node {
     private Node right;
     private Node down;
     private Node left;
+    private int costUp;
+    private int costRight;
+    private int costDown;
+    private int costLeft;
     private int distance;
     private Node previous;
     private String path;
@@ -62,9 +66,13 @@ class Node {
 
     void transferArcs(Node source) {
         setUp(source.getUp());
+        setCostUp(source.getCostUp());
         setDown(source.getDown());
+        setCostDown(source.getCostDown());
         setRight(source.getRight());
+        setCostRight(source.getCostRight());
         setLeft(source.getLeft());
+        setCostLeft(source.getCostLeft());
     }
 
     @Override

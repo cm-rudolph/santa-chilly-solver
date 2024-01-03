@@ -41,48 +41,56 @@ public class Board {
         return getAt(x, y) != FieldValue.OBSTACLE;
     }
 
-    public Coordinates moveUp(int playerX, int playerY) {
+    public CoordinatesAndDistance moveUp(int playerX, int playerY) {
+        int distance = 0;
         int y = playerY + height;
         while (canMoveUp(playerX, y)) {
             y--;
+            distance++;
             if (isWormholeAt(playerX, y)) {
-                return getWormholeTarget(playerX, y);
+                return new CoordinatesAndDistance(getWormholeTarget(playerX, y), distance);
             }
         }
-        return new Coordinates(playerX, y % height);
+        return new CoordinatesAndDistance(new Coordinates(playerX, y % height), distance);
     }
 
-    public Coordinates moveDown(int playerX, int playerY) {
+    public CoordinatesAndDistance moveDown(int playerX, int playerY) {
+        int distance = 0;
         int y = playerY;
         while (canMoveDown(playerX, y)) {
             y++;
+            distance++;
             if (isWormholeAt(playerX, y)) {
-                return getWormholeTarget(playerX, y);
+                return new CoordinatesAndDistance(getWormholeTarget(playerX, y), distance);
             }
         }
-        return new Coordinates(playerX, y % height);
+        return new CoordinatesAndDistance(new Coordinates(playerX, y % height), distance);
     }
 
-    public Coordinates moveLeft(int playerX, int playerY) {
+    public CoordinatesAndDistance moveLeft(int playerX, int playerY) {
+        int distance = 0;
         int x = playerX + width;
         while (canMoveLeft(x, playerY)) {
             x--;
+            distance++;
             if (isWormholeAt(x, playerY)) {
-                return getWormholeTarget(x, playerY);
+                return new CoordinatesAndDistance(getWormholeTarget(x, playerY), distance);
             }
         }
-        return new Coordinates(x % width, playerY);
+        return new CoordinatesAndDistance(new Coordinates(x % width, playerY), distance);
     }
 
-    public Coordinates moveRight(int playerX, int playerY) {
+    public CoordinatesAndDistance moveRight(int playerX, int playerY) {
+        int distance = 0;
         int x = playerX;
         while (canMoveRight(x, playerY)) {
             x++;
+            distance++;
             if (isWormholeAt(x, playerY)) {
-                return getWormholeTarget(x, playerY);
+                return new CoordinatesAndDistance(getWormholeTarget(x, playerY), distance);
             }
         }
-        return new Coordinates(x % width, playerY);
+        return new CoordinatesAndDistance(new Coordinates(x % width, playerY), distance);
     }
 
     private boolean isWormholeAt(int x, int y) {
@@ -166,5 +174,8 @@ public class Board {
             }
         }
         throw new IllegalArgumentException("The board doesn't have any exit.");
+    }
+
+    public record CoordinatesAndDistance(Coordinates coordinates, int distance) {
     }
 }
