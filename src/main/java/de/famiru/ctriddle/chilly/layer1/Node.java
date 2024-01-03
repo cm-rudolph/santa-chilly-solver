@@ -60,6 +60,13 @@ class Node {
         return target + String.format(" C(%d,%d)", coinX, coinY);
     }
 
+    void transferArcs(Node source) {
+        setUp(source.getUp());
+        setDown(source.getDown());
+        setRight(source.getRight());
+        setLeft(source.getLeft());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -25,7 +25,7 @@ class Graph {
         boolean firstNode = set.isEmpty();
 
         if (set.add(node) && !firstNode) {
-            transferArcs(set.iterator().next(), node);
+            node.transferArcs(set.iterator().next());
         }
         if (node.hasCoin()) {
             insertCoinNode(node);
@@ -38,13 +38,6 @@ class Graph {
         GraphCoordinates coordinates = new GraphCoordinates(node.getCoinX(), node.getCoinY());
         Set<Node> set = coinNodes.computeIfAbsent(coordinates, c -> new HashSet<>());
         set.add(node);
-    }
-
-    private void transferArcs(Node source, Node target) {
-        target.setUp(source.getUp());
-        target.setDown(source.getDown());
-        target.setRight(source.getRight());
-        target.setLeft(source.getLeft());
     }
 
     public void updateUp(int x, int y, Node node) {
