@@ -1,4 +1,4 @@
-package de.famiru.ctriddle.chilly;
+package de.famiru.ctriddle.chilly.game;
 
 import java.util.List;
 

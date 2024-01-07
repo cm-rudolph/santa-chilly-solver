@@ -1,7 +1,7 @@
 package de.famiru.ctriddle.chilly.layer1;
 
-import de.famiru.ctriddle.chilly.Board;
-import de.famiru.ctriddle.chilly.Coordinates;
+import de.famiru.ctriddle.chilly.game.Board;
+import de.famiru.ctriddle.chilly.game.Coordinates;
 
 import java.util.Set;
 
