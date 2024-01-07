@@ -1,4 +1,4 @@
-package de.famiru.ctriddle.chilly.layer1;
+package de.famiru.ctriddle.chilly.dijkstra;
 
 import de.famiru.ctriddle.chilly.game.Board;
 import de.famiru.ctriddle.chilly.game.Coordinates;
@@ -7,7 +7,8 @@ import java.util.Set;
 
 class GraphCreator {
     Graph create(Board board, int playerX, int playerY) {
-        Graph graph = new Graph();
+        Coordinates exit = board.getExit();
+        Graph graph = new Graph(exit.x(), exit.y());
         graph.insertNode(new Node(playerX, playerY));
 
         insertNode(board, graph, playerX, playerY);

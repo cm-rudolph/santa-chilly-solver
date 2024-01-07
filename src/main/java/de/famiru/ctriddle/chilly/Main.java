@@ -1,8 +1,7 @@
 package de.famiru.ctriddle.chilly;
 
 import de.famiru.ctriddle.chilly.game.BoardFactory;
-import de.famiru.ctriddle.chilly.gtsp.DijkstraSolver;
-import de.famiru.ctriddle.chilly.layer2.Matrix;
+import de.famiru.ctriddle.chilly.dijkstra.DijkstraSolver;
 import de.famiru.ctriddle.chilly.layer2.SolutionParser;
 import de.famiru.ctriddle.chilly.layer2.SolutionValidator;
 import de.famiru.ctriddle.chilly.layer2.TspFileWriter;

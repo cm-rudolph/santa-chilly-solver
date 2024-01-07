@@ -1,4 +1,4 @@
-package de.famiru.ctriddle.chilly.layer1;
+package de.famiru.ctriddle.chilly.dijkstra;
 
 import de.famiru.ctriddle.chilly.Constants;
 import lombok.AccessLevel;

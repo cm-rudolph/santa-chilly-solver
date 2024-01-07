@@ -1,18 +1,27 @@
-package de.famiru.ctriddle.chilly.layer1;
+package de.famiru.ctriddle.chilly.dijkstra;
 
 import java.util.*;
 
 class Graph {
-    // wenn hier ein Knoten eingefügt wird und die Liste nicht leer ist, dann werden die ausgehenden Kanten des
+    // wenn hier ein Knoten eingefügt wird und das Set nicht leer ist, dann werden die ausgehenden Kanten des
     // vorhandenen Knotens an den neu eingefügten ergänzt. Da der Knoten bereits besucht wurde, kann die Rekursion
     // dann abbrechen.
     private final Map<GraphCoordinates, Set<Node>> nodes = new HashMap<>();
 
-    // wenn hier ein Knoten eingefügt wird und die Liste nicht leer ist, dann wird der neue Knoten einfach ergänzt
+    // wenn hier ein Knoten eingefügt wird und das Set nicht leer ist, dann wird der neue Knoten einfach ergänzt
     private final Map<GraphCoordinates, Set<Node>> coinNodes = new HashMap<>();
+    private final GraphCoordinates exitNode;
+
+    Graph(int exitX, int exitY) {
+        exitNode = new GraphCoordinates(exitX, exitY);
+    }
 
     public Set<Node> getNodesAt(int x, int y) {
         return Set.copyOf(nodes.getOrDefault(new GraphCoordinates(x, y), Set.of()));
+    }
+
+    public Set<Node> getExitNodes() {
+        return getNodesAt(exitNode.x(), exitNode.y());
     }
 
     /**

@@ -1,4 +1,4 @@
-package de.famiru.ctriddle.chilly.layer2;
+package de.famiru.ctriddle.chilly;
 
 public class Matrix {
     private final int[][] entries;
@@ -56,7 +56,7 @@ public class Matrix {
         paths[i2] = pathBuf;
     }
 
-    int getEntry(int i, int j) {
+    public int getEntry(int i, int j) {
         return entries[i][j];
     }
 }
