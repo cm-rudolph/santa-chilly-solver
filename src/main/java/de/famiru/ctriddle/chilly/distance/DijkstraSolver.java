@@ -1,4 +1,4 @@
-package de.famiru.ctriddle.chilly.dijkstra;
+package de.famiru.ctriddle.chilly.distance;
 
 import de.famiru.ctriddle.chilly.Constants;
 import de.famiru.ctriddle.chilly.Matrix;
@@ -22,18 +22,20 @@ public class DijkstraSolver {
         this.graph = new GraphCreator().create(board, playerX, playerY);
     }
 
-    public Matrix createAtspMatrix() {
+    public Matrix createDistanceMatrix() {
         Node startNode = getStartNode();
         Set<Node> exitNodes = getExitNodes();
 
         List<Node> allNodes = findAndMarkAllRelevantNodes(startNode, exitNodes);
 
         Matrix matrix = createMatrix(allNodes, startNode, exitNodes);
-        transformFromGtspToAtsp(matrix);
         connectExitWithStart(matrix, startNode, exitNodes);
         return matrix;
     }
 
+    // This method is somehow misplaced, as it doesn't belong to distance calculation. But the graph has this
+    // information already present and other approaches would possibly require duplicate code or general exposure of the
+    // internal graph representation.
     public List<List<Integer>> getClusters() {
         List<List<Node>> clusters = graph.getCoinNodeClusters();
         List<List<Integer>> result = new ArrayList<>(clusters.size());
@@ -61,39 +63,6 @@ public class DijkstraSolver {
             node.setIndex(i);
         }
         return allNodes;
-    }
-
-    private void transformFromGtspToAtsp(Matrix matrix) {
-        List<List<Integer>> clusters = getClusters();
-        for (List<Integer> cluster : clusters) {
-            // move all outgoing arcs to preceding node in cluster cycle
-            for (int i = 0; i < cluster.size() - 1; i++) {
-                int nodeI1 = cluster.get(i);
-                int nodeI2 = cluster.get((i + 1) % cluster.size());
-                matrix.swapRows(nodeI1, nodeI2);
-            }
-
-            for (int i = 0; i < cluster.size(); i++) {
-                int nodeI = cluster.get(i);
-                for (int j = 0; j < cluster.size(); j++) {
-                    int nodeJ = cluster.get(j);
-
-                    if (i == j) {
-                        // restore self connect zeroes
-                        matrix.setPath(nodeI, nodeJ, "");
-                        matrix.setEntry(nodeI, nodeJ, 0);
-                    } else if (((i + 1) % cluster.size()) == j) {
-                        // place an arc of zero weight to the next node
-                        matrix.setPath(nodeI, nodeJ, "cluster shortcut");
-                        matrix.setEntry(nodeI, nodeJ, 0);
-                    } else {
-                        // never use other connections within cluster
-                        matrix.setPath(nodeI, nodeJ, "cluster disconnect");
-                        matrix.setEntry(nodeI, nodeJ, Constants.INFINITY);
-                    }
-                }
-            }
-        }
     }
 
     private void connectExitWithStart(Matrix matrix, Node startNode, Set<Node> exitNodes) {

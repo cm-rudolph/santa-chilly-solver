@@ -1,4 +1,4 @@
-package de.famiru.ctriddle.chilly.dijkstra;
+package de.famiru.ctriddle.chilly.distance;
 
 import de.famiru.ctriddle.chilly.game.Board;
 import de.famiru.ctriddle.chilly.game.Coordinates;

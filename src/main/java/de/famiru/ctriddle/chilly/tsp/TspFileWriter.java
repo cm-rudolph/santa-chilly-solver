@@ -1,4 +1,4 @@
-package de.famiru.ctriddle.chilly.layer2;
+package de.famiru.ctriddle.chilly.tsp;
 
 import de.famiru.ctriddle.chilly.Matrix;
 

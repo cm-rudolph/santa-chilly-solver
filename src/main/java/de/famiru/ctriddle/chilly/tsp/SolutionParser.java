@@ -1,4 +1,4 @@
-package de.famiru.ctriddle.chilly.layer2;
+package de.famiru.ctriddle.chilly.tsp;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

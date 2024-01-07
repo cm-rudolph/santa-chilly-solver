@@ -1,10 +1,11 @@
 package de.famiru.ctriddle.chilly;
 
 import de.famiru.ctriddle.chilly.game.BoardFactory;
-import de.famiru.ctriddle.chilly.dijkstra.DijkstraSolver;
-import de.famiru.ctriddle.chilly.layer2.SolutionParser;
-import de.famiru.ctriddle.chilly.layer2.SolutionValidator;
-import de.famiru.ctriddle.chilly.layer2.TspFileWriter;
+import de.famiru.ctriddle.chilly.distance.DijkstraSolver;
+import de.famiru.ctriddle.chilly.tsp.DistanceToAtspTransformer;
+import de.famiru.ctriddle.chilly.tsp.SolutionParser;
+import de.famiru.ctriddle.chilly.tsp.SolutionValidator;
+import de.famiru.ctriddle.chilly.tsp.TspFileWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +23,8 @@ public class Main {
 
         DijkstraSolver dijkstraSolver =
                 new DijkstraSolver(boardAndPlayer.board(), boardAndPlayer.playerX(), boardAndPlayer.playerY());
-        Matrix matrix = dijkstraSolver.createAtspMatrix();
+        Matrix matrix = dijkstraSolver.createDistanceMatrix();
+        new DistanceToAtspTransformer().transformDistanceMatrixToAtsp(matrix, dijkstraSolver.getClusters());
 
         new TspFileWriter().writeTspFile("chilly.tsp", matrix);
         LOGGER.info("Please pass chilly.tsp to a solver able to handle files in TSPLIB format.");
