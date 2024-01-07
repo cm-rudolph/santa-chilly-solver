@@ -5,6 +5,11 @@ import lombok.Getter;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The {@code Board} contains the structure of a board only. It does explicitly not contain any state.
+ * It can be asked if moving from a given position into a given direction is possible at all and where the player would
+ * be placed after moving into that direction.
+ */
 public class Board {
     private final FieldValue[][] field;
     private final Map<Coordinates, Coordinates> wormholes;
