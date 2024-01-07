@@ -1,6 +1,7 @@
-package de.famiru.ctriddle.chilly.tsp;
+package de.famiru.ctriddle.chilly.glue;
 
 import de.famiru.ctriddle.chilly.Matrix;
+import de.famiru.ctriddle.chilly.tsp.AtspToTspTransformer;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,9 +9,7 @@ import java.io.PrintWriter;
 import java.io.UncheckedIOException;
 
 public class TspFileWriter {
-    public void writeTspFile(String fileName, Matrix atspMatrix) {
-        Matrix matrix = new AtspToTspTransformer().transform(atspMatrix);
-
+    public void writeTspFile(String fileName, Matrix matrix) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             writer.println("NAME: chilly");
             writer.println("TYPE: TSP");

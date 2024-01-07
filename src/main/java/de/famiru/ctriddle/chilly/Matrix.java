@@ -1,5 +1,7 @@
 package de.famiru.ctriddle.chilly;
 
+import java.util.Arrays;
+
 public class Matrix {
     private final int[][] entries;
     private final String[][] paths;
@@ -20,6 +22,12 @@ public class Matrix {
                 paths[i][j] = "";
             }
         }
+    }
+
+    public Matrix(Matrix copy) {
+        entries = Arrays.stream(copy.entries).map(int[]::clone).toArray(int[][]::new);
+        paths = Arrays.stream(copy.paths).map(String[]::clone).toArray(String[][]::new);
+        descriptions = Arrays.copyOf(copy.descriptions, copy.descriptions.length);
     }
 
     public int getDimension() {

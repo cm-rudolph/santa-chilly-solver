@@ -1,11 +1,12 @@
 package de.famiru.ctriddle.chilly;
 
-import de.famiru.ctriddle.chilly.game.BoardFactory;
 import de.famiru.ctriddle.chilly.distance.DijkstraSolver;
+import de.famiru.ctriddle.chilly.game.BoardFactory;
+import de.famiru.ctriddle.chilly.glue.TspFileWriter;
+import de.famiru.ctriddle.chilly.tsp.AtspToTspTransformer;
 import de.famiru.ctriddle.chilly.tsp.DistanceToAtspTransformer;
 import de.famiru.ctriddle.chilly.tsp.SolutionParser;
 import de.famiru.ctriddle.chilly.tsp.SolutionValidator;
-import de.famiru.ctriddle.chilly.tsp.TspFileWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,9 +25,13 @@ public class Main {
         DijkstraSolver dijkstraSolver =
                 new DijkstraSolver(boardAndPlayer.board(), boardAndPlayer.playerX(), boardAndPlayer.playerY());
         Matrix matrix = dijkstraSolver.createDistanceMatrix();
-        new DistanceToAtspTransformer().transformDistanceMatrixToAtsp(matrix, dijkstraSolver.getClusters());
 
-        new TspFileWriter().writeTspFile("chilly.tsp", matrix);
+        Matrix atspMatrix = new DistanceToAtspTransformer()
+                .transformDistanceMatrixToAtsp(matrix, dijkstraSolver.getClusters());
+
+        Matrix tspMatrix = new AtspToTspTransformer().transformAtspToTsp(atspMatrix);
+        new TspFileWriter().writeTspFile("chilly.tsp", tspMatrix);
+
         LOGGER.info("Please pass chilly.tsp to a solver able to handle files in TSPLIB format.");
         LOGGER.info("Place the solution as file chilly.sol into the working dir and press enter.");
         System.in.read();
@@ -38,16 +43,16 @@ public class Main {
         List<Integer> path = new SolutionParser().parseSolution("chilly.sol");
 
         SolutionValidator validator = new SolutionValidator();
-        if (!validator.isValidSolution(matrix, path)) {
+        if (!validator.isValidSolution(atspMatrix, path)) {
             // possibly the solution is simply the wrong way around
             Collections.reverse(path);
         }
-        if (!validator.isValidSolution(matrix, path)) {
+        if (!validator.isValidSolution(atspMatrix, path)) {
             LOGGER.error("The solution is not valid.");
             return;
         }
 
-        StringBuilder sb = createInstructions(path, matrix);
+        StringBuilder sb = createInstructions(path, atspMatrix);
         LOGGER.info("Solution (length {}): {}", sb.length(), sb.toString());
     }
 

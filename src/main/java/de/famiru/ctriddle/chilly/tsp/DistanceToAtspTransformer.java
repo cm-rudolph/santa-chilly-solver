@@ -6,13 +6,14 @@ import de.famiru.ctriddle.chilly.Matrix;
 import java.util.List;
 
 public class DistanceToAtspTransformer {
-    public void transformDistanceMatrixToAtsp(Matrix matrix, List<List<Integer>> clusters) {
+    public Matrix transformDistanceMatrixToAtsp(Matrix matrix, List<List<Integer>> clusters) {
+        Matrix result = new Matrix(matrix);
         for (List<Integer> cluster : clusters) {
             // move all outgoing arcs to preceding node in cluster cycle
             for (int i = 0; i < cluster.size() - 1; i++) {
                 int nodeI1 = cluster.get(i);
                 int nodeI2 = cluster.get((i + 1) % cluster.size());
-                matrix.swapRows(nodeI1, nodeI2);
+                result.swapRows(nodeI1, nodeI2);
             }
 
             for (int i = 0; i < cluster.size(); i++) {
@@ -22,19 +23,20 @@ public class DistanceToAtspTransformer {
 
                     if (i == j) {
                         // restore self connect zeroes
-                        matrix.setPath(nodeI, nodeJ, "");
-                        matrix.setEntry(nodeI, nodeJ, 0);
+                        result.setPath(nodeI, nodeJ, "");
+                        result.setEntry(nodeI, nodeJ, 0);
                     } else if (((i + 1) % cluster.size()) == j) {
                         // place an arc of zero weight to the next node
-                        matrix.setPath(nodeI, nodeJ, "cluster shortcut");
-                        matrix.setEntry(nodeI, nodeJ, 0);
+                        result.setPath(nodeI, nodeJ, "cluster shortcut");
+                        result.setEntry(nodeI, nodeJ, 0);
                     } else {
                         // never use other connections within cluster
-                        matrix.setPath(nodeI, nodeJ, "cluster disconnect");
-                        matrix.setEntry(nodeI, nodeJ, Constants.INFINITY);
+                        result.setPath(nodeI, nodeJ, "cluster disconnect");
+                        result.setEntry(nodeI, nodeJ, Constants.INFINITY);
                     }
                 }
             }
         }
+        return result;
     }
 }
