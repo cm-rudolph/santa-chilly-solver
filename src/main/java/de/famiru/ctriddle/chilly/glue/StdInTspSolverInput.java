@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,7 +29,9 @@ class StdInTspSolverInput implements TspSolverInput {
         }
 
         // close the cycle
-        result.add(result.get(0));
+        if (!Objects.equals(result.get(0), result.get(result.size() - 1))) {
+            result.add(result.get(0));
+        }
 
         return result;
     }
