@@ -2,15 +2,14 @@ package de.famiru.ctriddle.chilly;
 
 import de.famiru.ctriddle.chilly.distance.DijkstraSolver;
 import de.famiru.ctriddle.chilly.game.BoardFactory;
-import de.famiru.ctriddle.chilly.glue.TspFileWriter;
+import de.famiru.ctriddle.chilly.glue.GlueModuleFactory;
+import de.famiru.ctriddle.chilly.glue.GlueModuleType;
 import de.famiru.ctriddle.chilly.tsp.AtspToTspTransformer;
 import de.famiru.ctriddle.chilly.tsp.DistanceToAtspTransformer;
-import de.famiru.ctriddle.chilly.tsp.SolutionParser;
 import de.famiru.ctriddle.chilly.tsp.SolutionValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -18,8 +17,9 @@ import java.util.List;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
+    private static final GlueModuleType GLUE_MODULE_TYPE = GlueModuleType.CONCORDE;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         BoardFactory.BoardAndPlayer boardAndPlayer = new BoardFactory().loadLevel("level.txt");
 
         DijkstraSolver dijkstraSolver =
@@ -30,17 +30,16 @@ public class Main {
                 .transformDistanceMatrixToAtsp(matrix, dijkstraSolver.getClusters());
 
         Matrix tspMatrix = new AtspToTspTransformer().transformAtspToTsp(atspMatrix);
-        new TspFileWriter().writeTspFile("chilly.tsp", tspMatrix);
 
-        LOGGER.info("Please pass chilly.tsp to a solver able to handle files in TSPLIB format.");
-        LOGGER.info("Place the solution as file chilly.sol into the working dir and press enter.");
-        System.in.read();
+        GlueModuleFactory glueModuleFactory = new GlueModuleFactory();
+        glueModuleFactory.createTspSolverOutput(GLUE_MODULE_TYPE).output(tspMatrix);
+
         if (!Files.isRegularFile(Path.of("chilly.sol"))) {
             LOGGER.error("File not found. Did you place chilly.sol in the working directory?");
             return;
         }
 
-        List<Integer> path = new SolutionParser().parseSolution("chilly.sol");
+        List<Integer> path = glueModuleFactory.createTspSolverInput(GLUE_MODULE_TYPE).readSolution();
 
         SolutionValidator validator = new SolutionValidator();
         if (!validator.isValidSolution(atspMatrix, path)) {

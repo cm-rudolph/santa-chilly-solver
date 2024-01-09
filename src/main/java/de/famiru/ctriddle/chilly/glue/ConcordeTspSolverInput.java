@@ -1,4 +1,4 @@
-package de.famiru.ctriddle.chilly.tsp;
+package de.famiru.ctriddle.chilly.glue;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,11 +12,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SolutionParser {
-    private static final Logger LOGGER = LogManager.getLogger(SolutionParser.class);
+class ConcordeTspSolverInput implements TspSolverInput {
+    private static final Logger LOGGER = LogManager.getLogger(ConcordeTspSolverInput.class);
 
-    public List<Integer> parseSolution(String fileName) {
-        List<String> lines = readFile(fileName);
+    @Override
+    public List<Integer> readSolution() {
+        instructUser();
+
+        List<String> lines = readFile();
 
         Pattern numberPattern = Pattern.compile("[0-9]+");
         List<Integer> result = new ArrayList<>();
@@ -40,9 +43,18 @@ public class SolutionParser {
         return result;
     }
 
-    private List<String> readFile(String fileName) {
+    private void instructUser() {
+        LOGGER.info("Place the solution as file chilly.sol into the working dir and press enter.");
         try {
-            return Files.readAllLines(Path.of(fileName));
+            System.in.read();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private List<String> readFile() {
+        try {
+            return Files.readAllLines(Path.of("chilly.sol"));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
