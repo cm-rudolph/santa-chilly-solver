@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
-    private static final GlueModuleType GLUE_MODULE_TYPE = GlueModuleType.OR_TOOLS;
+    private static final GlueModuleType GLUE_MODULE_TYPE = GlueModuleType.CONCORDE;
 
     public static void main(String[] args) {
         BoardFactory.BoardAndPlayer boardAndPlayer = new BoardFactory().loadLevel("level.txt");

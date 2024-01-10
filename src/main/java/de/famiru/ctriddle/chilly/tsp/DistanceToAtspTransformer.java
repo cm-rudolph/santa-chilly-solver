@@ -8,6 +8,14 @@ import java.util.List;
 public class DistanceToAtspTransformer {
     public Matrix transformDistanceMatrixToAtsp(Matrix matrix, List<List<Integer>> clusters) {
         Matrix result = new Matrix(matrix);
+        for (int i = 0; i < matrix.getDimension(); i++) {
+            for (int j = 0; j < matrix.getDimension(); j++) {
+                int entry = result.getEntry(i, j);
+                if (entry > 0) {
+                    result.setEntry(i, j, entry + Constants.DISTANCE_TO_ATSP_WEIGHT);
+                }
+            }
+        }
         for (List<Integer> cluster : clusters) {
             // move all outgoing arcs to preceding node in cluster cycle
             for (int i = 0; i < cluster.size() - 1; i++) {
