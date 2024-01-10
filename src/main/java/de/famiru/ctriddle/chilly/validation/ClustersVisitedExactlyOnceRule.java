@@ -1,6 +1,8 @@
 package de.famiru.ctriddle.chilly.validation;
 
 import de.famiru.ctriddle.chilly.Matrix;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashSet;
 import java.util.List;
@@ -8,7 +10,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ClustersVisitedExactlyOnceRule implements ValidationRule {
+class ClustersVisitedExactlyOnceRule implements ValidationRule {
+    private static final Logger LOGGER = LogManager.getLogger(ClustersVisitedExactlyOnceRule.class);
+
     public static final Pattern COIN_PATTERN = Pattern.compile(" C\\(([0-9]+),([0-9]+)\\)");
 
     @Override
@@ -24,6 +28,8 @@ public class ClustersVisitedExactlyOnceRule implements ValidationRule {
 
                 if (visitedClusters.contains(coordinates)) {
                     if (!coordinates.equals(previous)) {
+                        LOGGER.debug("Cluster for coin at ({},{}) has been left intermittently.",
+                                coordinates.x(), coordinates.y());
                         return false;
                     }
                 }

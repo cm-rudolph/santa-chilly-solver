@@ -4,7 +4,7 @@ import de.famiru.ctriddle.chilly.Matrix;
 
 import java.util.List;
 
-public class NodeAndGhostNodeVisitedAlternatelyRule implements ValidationRule {
+class NodeAndGhostNodeVisitedAlternatelyRule implements ValidationRule {
     @Override
     public boolean isSatisfied(Matrix matrix, List<Integer> path) {
         for (int i = 0; i < matrix.getDimension(); i++) {

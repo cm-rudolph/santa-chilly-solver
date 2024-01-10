@@ -5,7 +5,7 @@ import de.famiru.ctriddle.chilly.Matrix;
 
 import java.util.List;
 
-public class NoDisconnectsRule implements ValidationRule {
+class NoDisconnectsRule implements ValidationRule {
     @Override
     public boolean isSatisfied(Matrix matrix, List<Integer> path) {
         for (int j = 0; j < path.size(); j++) {

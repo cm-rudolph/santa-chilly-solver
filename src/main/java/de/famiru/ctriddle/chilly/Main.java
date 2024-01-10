@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
-    private static final GlueModuleType GLUE_MODULE_TYPE = GlueModuleType.CONCORDE;
+    private static final GlueModuleType GLUE_MODULE_TYPE = GlueModuleType.OR_TOOLS;
 
     public static void main(String[] args) {
         BoardFactory.BoardAndPlayer boardAndPlayer = new BoardFactory().loadLevel("level.txt");
@@ -41,21 +41,23 @@ public class Main {
 
         List<Integer> path = glueModuleFactory.createTspSolverInput(GLUE_MODULE_TYPE).readSolution();
 
+        String instruction = createInstructions(path, atspMatrix);
+
         SolutionValidator validator = new SolutionValidator();
         if (!validator.isValidSolution(atspMatrix, path)) {
             // possibly the solution is simply the wrong way around
             Collections.reverse(path);
         }
+
         if (!validator.isValidSolution(atspMatrix, path)) {
             LOGGER.error("The solution is not valid.");
             return;
         }
 
-        StringBuilder sb = createInstructions(path, atspMatrix);
-        LOGGER.info("Solution (length {}): {}", sb.length(), sb.toString());
+        LOGGER.info("Solution (length {}): {}", instruction.length(), instruction);
     }
 
-    private static StringBuilder createInstructions(List<Integer> path, Matrix matrix) {
+    private static String createInstructions(List<Integer> path, Matrix matrix) {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < path.size(); j++) {
             int i = path.get(j);
@@ -72,6 +74,6 @@ public class Main {
                 LOGGER.debug("{}: {}", i, matrix.getDescription(i));
             }
         }
-        return sb;
+        return sb.toString();
     }
 }

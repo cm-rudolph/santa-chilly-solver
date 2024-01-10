@@ -6,7 +6,7 @@ import de.famiru.ctriddle.chilly.Matrix;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExitToStartOnlyOnceRule implements ValidationRule {
+class ExitToStartOnlyOnceRule implements ValidationRule {
     @Override
     public boolean isSatisfied(Matrix matrix, List<Integer> path) {
         List<String> pathDescriptions = extractPathDescriptions(matrix, path);
