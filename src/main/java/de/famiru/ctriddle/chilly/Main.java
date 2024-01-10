@@ -6,7 +6,7 @@ import de.famiru.ctriddle.chilly.glue.GlueModuleFactory;
 import de.famiru.ctriddle.chilly.glue.GlueModuleType;
 import de.famiru.ctriddle.chilly.tsp.AtspToTspTransformer;
 import de.famiru.ctriddle.chilly.tsp.DistanceToAtspTransformer;
-import de.famiru.ctriddle.chilly.tsp.SolutionValidator;
+import de.famiru.ctriddle.chilly.validation.SolutionValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
