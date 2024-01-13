@@ -15,8 +15,9 @@ public class SolutionValidator {
                 new NodeAndGhostNodeVisitedAlternatelyRule());
     }
 
-    public boolean isValidSolution(Matrix matrix, List<Integer> path) {
+    public boolean isValidSolution(boolean atspSolution, Matrix matrix, List<Integer> path) {
         return validationRules.stream()
+                .filter(rule -> !atspSolution || !rule.isRelevantForSymmetricTspOnly())
                 .allMatch(rule -> rule.isSatisfied(matrix, path));
     }
 }

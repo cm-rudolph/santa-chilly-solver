@@ -29,10 +29,12 @@ public class Main {
         Matrix atspMatrix = new DistanceToAtspTransformer()
                 .transformDistanceMatrixToAtsp(matrix, dijkstraSolver.getClusters());
 
-        Matrix tspMatrix = new AtspToTspTransformer().transformAtspToTsp(atspMatrix);
+        Matrix transformedMatrix = GLUE_MODULE_TYPE.isAtspSolver() ?
+                atspMatrix :
+                new AtspToTspTransformer().transformAtspToTsp(atspMatrix);
 
         GlueModuleFactory glueModuleFactory = new GlueModuleFactory();
-        glueModuleFactory.createTspSolverOutput(GLUE_MODULE_TYPE).output(tspMatrix);
+        glueModuleFactory.createTspSolverOutput(GLUE_MODULE_TYPE).output(transformedMatrix);
 
         if (!Files.isRegularFile(Path.of("chilly.sol"))) {
             LOGGER.error("File not found. Did you place chilly.sol in the working directory?");
@@ -44,12 +46,12 @@ public class Main {
         String instruction = createInstructions(path, atspMatrix);
 
         SolutionValidator validator = new SolutionValidator();
-        if (!validator.isValidSolution(atspMatrix, path)) {
+        if (!validator.isValidSolution(GLUE_MODULE_TYPE.isAtspSolver(), atspMatrix, path)) {
             // possibly the solution is simply the wrong way around
             Collections.reverse(path);
         }
 
-        if (!validator.isValidSolution(atspMatrix, path)) {
+        if (!validator.isValidSolution(GLUE_MODULE_TYPE.isAtspSolver(), atspMatrix, path)) {
             LOGGER.error("The solution is not valid.");
             return;
         }

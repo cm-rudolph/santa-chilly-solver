@@ -19,4 +19,9 @@ class NodeAndGhostNodeVisitedAlternatelyRule implements ValidationRule {
         }
         return true;
     }
+
+    @Override
+    public boolean isRelevantForSymmetricTspOnly() {
+        return true;
+    }
 }
