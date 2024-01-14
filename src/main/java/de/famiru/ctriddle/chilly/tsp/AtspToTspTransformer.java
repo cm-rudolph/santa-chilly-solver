@@ -1,11 +1,12 @@
-package de.famiru.ctriddle.chilly.layer2;
+package de.famiru.ctriddle.chilly.tsp;
 
 import de.famiru.ctriddle.chilly.Constants;
+import de.famiru.ctriddle.chilly.Matrix;
 
 import static de.famiru.ctriddle.chilly.Constants.ATSP_TO_STSP_WEIGHT;
 
 public class AtspToTspTransformer {
-    Matrix transform(Matrix atspMatrix) {
+    public Matrix transformAtspToTsp(Matrix atspMatrix) {
         int dimension = atspMatrix.getDimension();
 
         Matrix tspMatrix = new Matrix(dimension * 2);

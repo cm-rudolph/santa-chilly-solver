@@ -1,4 +1,6 @@
-package de.famiru.ctriddle.chilly.layer2;
+package de.famiru.ctriddle.chilly;
+
+import java.util.Arrays;
 
 public class Matrix {
     private final int[][] entries;
@@ -20,6 +22,12 @@ public class Matrix {
                 paths[i][j] = "";
             }
         }
+    }
+
+    public Matrix(Matrix copy) {
+        entries = Arrays.stream(copy.entries).map(int[]::clone).toArray(int[][]::new);
+        paths = Arrays.stream(copy.paths).map(String[]::clone).toArray(String[][]::new);
+        descriptions = Arrays.copyOf(copy.descriptions, copy.descriptions.length);
     }
 
     public int getDimension() {
@@ -56,7 +64,7 @@ public class Matrix {
         paths[i2] = pathBuf;
     }
 
-    int getEntry(int i, int j) {
+    public int getEntry(int i, int j) {
         return entries[i][j];
     }
 }

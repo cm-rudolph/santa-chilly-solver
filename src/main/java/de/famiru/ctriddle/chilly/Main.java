@@ -1,71 +1,65 @@
 package de.famiru.ctriddle.chilly;
 
-import de.famiru.ctriddle.chilly.layer1.DijkstraSolver;
-import de.famiru.ctriddle.chilly.layer2.Matrix;
-import de.famiru.ctriddle.chilly.layer2.SolutionParser;
-import de.famiru.ctriddle.chilly.layer2.SolutionValidator;
-import de.famiru.ctriddle.chilly.layer2.TspFileWriter;
+import de.famiru.ctriddle.chilly.distance.DijkstraSolver;
+import de.famiru.ctriddle.chilly.game.BoardFactory;
+import de.famiru.ctriddle.chilly.glue.GlueModuleFactory;
+import de.famiru.ctriddle.chilly.glue.GlueModuleType;
+import de.famiru.ctriddle.chilly.tsp.AtspToTspTransformer;
+import de.famiru.ctriddle.chilly.tsp.DistanceToAtspTransformer;
+import de.famiru.ctriddle.chilly.validation.SolutionValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
+    private static final GlueModuleType GLUE_MODULE_TYPE = GlueModuleType.CONCORDE;
 
-    public static void main(String[] args) throws IOException {
-        String wormholes;
-        List<String> rows;
-        try (InputStream is = Main.class.getClassLoader().getResourceAsStream("level.txt");
-             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-            wormholes = reader.readLine();
-            rows = new ArrayList<>(40);
-            while (reader.ready()) {
-                rows.add(reader.readLine().replace("|", ""));
-            }
-        }
-
-        BoardFactory.BoardAndPlayer boardAndPlayer = new BoardFactory().loadLevel(rows, wormholes);
+    public static void main(String[] args) {
+        BoardFactory.BoardAndPlayer boardAndPlayer = new BoardFactory().loadLevel("level.txt");
 
         DijkstraSolver dijkstraSolver =
                 new DijkstraSolver(boardAndPlayer.board(), boardAndPlayer.playerX(), boardAndPlayer.playerY());
-        Matrix matrix = dijkstraSolver.createAtspMatrix();
+        Matrix matrix = dijkstraSolver.createDistanceMatrix();
 
-        new TspFileWriter().writeTspFile("chilly.tsp", matrix);
-        LOGGER.info("Please pass chilly.tsp to a solver able to handle files in TSPLIB format.");
-        LOGGER.info("Place the solution as file chilly.sol into the working dir and press enter.");
-        System.in.read();
+        Matrix atspMatrix = new DistanceToAtspTransformer()
+                .transformDistanceMatrixToAtsp(matrix, dijkstraSolver.getClusters());
+
+        Matrix transformedMatrix = GLUE_MODULE_TYPE.isAtspSolver() ?
+                atspMatrix :
+                new AtspToTspTransformer().transformAtspToTsp(atspMatrix);
+
+        GlueModuleFactory glueModuleFactory = new GlueModuleFactory();
+        glueModuleFactory.createTspSolverOutput(GLUE_MODULE_TYPE).output(transformedMatrix);
+
         if (!Files.isRegularFile(Path.of("chilly.sol"))) {
             LOGGER.error("File not found. Did you place chilly.sol in the working directory?");
             return;
         }
 
-        List<Integer> path = new SolutionParser().parseSolution("chilly.sol");
+        List<Integer> path = glueModuleFactory.createTspSolverInput(GLUE_MODULE_TYPE).readSolution();
+
+        String instruction = createInstructions(path, atspMatrix);
 
         SolutionValidator validator = new SolutionValidator();
-        if (!validator.isValidSolution(matrix, path)) {
+        if (!validator.isValidSolution(GLUE_MODULE_TYPE.isAtspSolver(), atspMatrix, path)) {
             // possibly the solution is simply the wrong way around
             Collections.reverse(path);
         }
-        if (!validator.isValidSolution(matrix, path)) {
+
+        if (!validator.isValidSolution(GLUE_MODULE_TYPE.isAtspSolver(), atspMatrix, path)) {
             LOGGER.error("The solution is not valid.");
             return;
         }
 
-        StringBuilder sb = createInstructions(path, matrix);
-        LOGGER.info("Solution (length {}): {}", sb.length(), sb.toString());
+        LOGGER.info("Solution (length {}): {}", instruction.length(), instruction);
     }
 
-    private static StringBuilder createInstructions(List<Integer> path, Matrix matrix) {
+    private static String createInstructions(List<Integer> path, Matrix matrix) {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < path.size(); j++) {
             int i = path.get(j);
@@ -82,6 +76,6 @@ public class Main {
                 LOGGER.debug("{}: {}", i, matrix.getDescription(i));
             }
         }
-        return sb;
+        return sb.toString();
     }
 }

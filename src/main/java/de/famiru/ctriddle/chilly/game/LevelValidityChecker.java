@@ -1,4 +1,4 @@
-package de.famiru.ctriddle.chilly;
+package de.famiru.ctriddle.chilly.game;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +24,8 @@ class LevelValidityChecker {
                 allNonNull(rows) &&
                 isRectangular(rows) &&
                 containsOnlyValidCharacters(rows) &&
-                hasExactlyOnePlayer(rows);
+                hasExactlyOnePlayer(rows) &&
+                hasExactlyOneExit(rows);
     }
 
     boolean isValid(String wormholes) {
@@ -66,14 +67,22 @@ class LevelValidityChecker {
     }
 
     private boolean hasExactlyOnePlayer(List<String> rows) {
-        int numberOfPlayers = 0;
+        return hasExactlyOneFieldOfType(rows, 'P');
+    }
+
+    private boolean hasExactlyOneExit(List<String> rows) {
+        return hasExactlyOneFieldOfType(rows, 'X');
+    }
+
+    private boolean hasExactlyOneFieldOfType(List<String> rows, char type) {
+        int count = 0;
         for (String row : rows) {
             for (int i = 0; i < row.length(); i++) {
-                if (row.charAt(i) == 'P') {
-                    numberOfPlayers++;
+                if (row.charAt(i) == type) {
+                    count++;
                 }
             }
         }
-        return numberOfPlayers == 1;
+        return count == 1;
     }
 }

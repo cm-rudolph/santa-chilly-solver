@@ -1,37 +1,56 @@
-package de.famiru.ctriddle.chilly.layer1;
+package de.famiru.ctriddle.chilly.distance;
 
-import de.famiru.ctriddle.chilly.Board;
 import de.famiru.ctriddle.chilly.Constants;
-import de.famiru.ctriddle.chilly.Coordinates;
-import de.famiru.ctriddle.chilly.layer2.Matrix;
+import de.famiru.ctriddle.chilly.Matrix;
+import de.famiru.ctriddle.chilly.game.Board;
 
 import java.util.*;
 
+/**
+ * This class creates a {@linkplain Matrix} representing an asymmetric travelling salesman problem for a given instance
+ * of a {@linkplain Board} and initial player position. The matrix contains every possible move that would collect a
+ * coin.
+ */
 public class DijkstraSolver {
-    private final Board board;
     private final Graph graph;
     private final int playerX;
     private final int playerY;
 
     public DijkstraSolver(Board board, int playerX, int playerY) {
-        this.board = board;
         this.playerX = playerX;
         this.playerY = playerY;
         this.graph = new GraphCreator().create(board, playerX, playerY);
     }
 
-    public Matrix createAtspMatrix() {
+    public Matrix createDistanceMatrix() {
         Node startNode = getStartNode();
         Set<Node> exitNodes = getExitNodes();
 
         List<Node> allNodes = findAndMarkAllRelevantNodes(startNode, exitNodes);
 
         Matrix matrix = createMatrix(allNodes, startNode, exitNodes);
-        transformFromGtspToAtsp(matrix);
         connectExitWithStart(matrix, startNode, exitNodes);
         return matrix;
     }
 
+    // This method is somehow misplaced, as it doesn't belong to distance calculation. But the graph has this
+    // information already present and other approaches would possibly require duplicate code or general exposure of the
+    // internal graph representation.
+    public List<List<Integer>> getClusters() {
+        List<List<Node>> clusters = graph.getCoinNodeClusters();
+        List<List<Integer>> result = new ArrayList<>(clusters.size());
+        for (List<Node> cluster : clusters) {
+            result.add(cluster.stream()
+                    .map(Node::getIndex)
+                    .toList());
+        }
+        return result;
+    }
+
+    /*
+     * "Relevant" means that the node is one that represents a move collecting a coin.
+     * "Mark" means that these nodes get a unique index which will later represent the matrix row / column index.
+     */
     private List<Node> findAndMarkAllRelevantNodes(Node startNode, Set<Node> exitNodes) {
         List<Node> allNodes = new ArrayList<>();
         allNodes.add(startNode);
@@ -44,39 +63,6 @@ public class DijkstraSolver {
             node.setIndex(i);
         }
         return allNodes;
-    }
-
-    private void transformFromGtspToAtsp(Matrix matrix) {
-        List<List<Node>> clusters = graph.getCoinNodeClusters();
-        for (List<Node> cluster : clusters) {
-            // move all outgoing arcs to preceding node in cluster cycle
-            for (int i = 0; i < cluster.size() - 1; i++) {
-                Node nodeI1 = cluster.get(i);
-                Node nodeI2 = cluster.get((i + 1) % cluster.size());
-                matrix.swapRows(nodeI1.getIndex(), nodeI2.getIndex());
-            }
-
-            for (int i = 0; i < cluster.size(); i++) {
-                Node nodeI = cluster.get(i);
-                for (int j = 0; j < cluster.size(); j++) {
-                    Node nodeJ = cluster.get(j);
-
-                    if (i == j) {
-                        // restore self connect zeroes
-                        matrix.setPath(nodeI.getIndex(), nodeJ.getIndex(), "");
-                        matrix.setEntry(nodeI.getIndex(), nodeJ.getIndex(), 0);
-                    } else if (((i + 1) % cluster.size()) == j) {
-                        // place an arc of zero weight to the next node
-                        matrix.setPath(nodeI.getIndex(), nodeJ.getIndex(), "cluster shortcut");
-                        matrix.setEntry(nodeI.getIndex(), nodeJ.getIndex(), 0);
-                    } else {
-                        // never use other connections within cluster
-                        matrix.setPath(nodeI.getIndex(), nodeJ.getIndex(), "cluster disconnect");
-                        matrix.setEntry(nodeI.getIndex(), nodeJ.getIndex(), Constants.INFINITY);
-                    }
-                }
-            }
-        }
     }
 
     private void connectExitWithStart(Matrix matrix, Node startNode, Set<Node> exitNodes) {
@@ -98,8 +84,7 @@ public class DijkstraSolver {
     }
 
     private Set<Node> getExitNodes() {
-        Coordinates exit = board.getExit();
-        return graph.getNodesAt(exit.x(), exit.y());
+        return graph.getExitNodes();
     }
 
     private Matrix createMatrix(List<Node> allNodes, Node startNode, Set<Node> exitNodes) {
