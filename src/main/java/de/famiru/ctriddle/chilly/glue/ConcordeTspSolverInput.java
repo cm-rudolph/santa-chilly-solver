@@ -19,6 +19,11 @@ class ConcordeTspSolverInput implements TspSolverInput {
     public List<Integer> readSolution() {
         instructUser();
 
+        if (!Files.isRegularFile(Path.of("chilly.sol"))) {
+            LOGGER.error("File not found. Did you place chilly.sol in the working directory?");
+            return List.of();
+        }
+
         List<String> lines = readFile();
 
         Pattern numberPattern = Pattern.compile("[0-9]+");

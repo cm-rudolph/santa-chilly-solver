@@ -29,7 +29,7 @@ class Graph {
      */
     public boolean insertNode(Node node) {
         GraphCoordinates coordinates = new GraphCoordinates(node.getX(), node.getY());
-        Set<Node> set = nodes.computeIfAbsent(coordinates, c -> new HashSet<>());
+        Set<Node> set = nodes.computeIfAbsent(coordinates, c -> new LinkedHashSet<>());
 
         boolean firstNode = set.isEmpty();
 
