@@ -66,3 +66,19 @@ Nachdem der in der Datei [level.txt](src/main/resources/level.txt) beschriebene 
 ```text
 RULDLDLDULRUDDLULDLULULULULDLRULURDLDLURULDLDRDLDLDLDRULDLULULDRURUDLDLRUDRULDRDLRURDRDRDRDRURLDLDRDLDR
 ```
+
+## Ausführen des Programms
+
+Das Ausführen des Programms erfordert ein im System installiertes JDK 17.
+
+Ist diese Voraussetzung gegeben, kann es mittels folgendem Befehl gestartet werden:
+
+```shell
+./gradlew run
+```
+
+Unter Windows:
+
+```shell
+gradlew.bat run
+```
