@@ -82,3 +82,22 @@ Unter Windows:
 ```shell
 gradlew.bat run
 ```
+
+### Levelbeschreibung
+
+Wenn ein anderes Level gelöst werden soll, dann muss zuvor die Datei `level.txt` angepasst werden.
+
+In der ersten Zeile stehen die Verbindungen zwischen den Löchern, wobei die Indizes in der oberen, linken Spielfeldecke
+bei den Koordinaten (0,0) beginnen. In den nachfolgenden Zeilen findet sich die Spielfeldbeschreibung. Jedes Zeichen
+entspricht einem Spielfeld. Eine Zeile wird immer durch ein |-Symbol abgeschlossen.
+
+| Zeichen     | Bedeutung    |
+|-------------|--------------|
+| T           | Baum         |
+| #           | Fels         |
+| LEERZEICHEN | Freies Feld  |
+| O           | Loch         |
+| $           | Geschenk     |
+| P           | Startfeld    |
+| X           | Ausgang      |
+| \|          | Rechter Rand |
