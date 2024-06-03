@@ -28,7 +28,7 @@ class ConcordeTspSolverExecutor implements TspSolverExecutor {
             logOutput(process);
 
             int returnCode = process.waitFor();
-            LOGGER.debug("Concorde returned status code {}.", returnCode);
+            LOGGER.debug("Concorde returned exit code {}.", returnCode);
             success = returnCode == 0;
         } catch (IOException e) {
             LOGGER.error("Failed to execute concorde.", e);
@@ -54,10 +54,12 @@ class ConcordeTspSolverExecutor implements TspSolverExecutor {
         new Thread(() -> {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 LOGGER.debug("Concorde output:");
+                LOGGER.debug("================");
                 String line;
                 while ((line = reader.readLine()) != null) {
                     LOGGER.debug("{}", line);
                 }
+                LOGGER.debug("================");
             } catch (IOException e) {
                 LOGGER.error("Failed to process concorde output.", e);
             }
