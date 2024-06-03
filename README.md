@@ -69,18 +69,51 @@ RULDLDLDULRUDDLULDLULULULULDLRULURDLDLURULDLDRDLDLDLDRULDLULULDRURUDLDLRUDRULDRD
 
 ## Ausführen des Programms
 
-Das Ausführen des Programms erfordert ein im System installiertes JDK 17.
+Das Ausführen des Programms erfordert ein im System installiertes JRE 17 oder höher.
 
-Ist diese Voraussetzung gegeben, kann es mittels folgendem Befehl gestartet werden:
+Die ausführbare Datei kann auf der
+[Release-Seite des Projektes](https://github.com/cm-rudolph/santa-chilly-solver/releases) heruntergeladen werden.
+
+Zunächst muss die .zip oder .tar-Datei entpackt werden. Außerdem muss eine `level.txt`-Datei im Ausführungsverzeichnis
+vorhanden sein. Wie diese Datei aufgebaut ist, ist weiter unten in diesem Dokument beschrieben. Alternativ kann auch die
+Datei [hier aus dem Repository](https://raw.githubusercontent.com/cm-rudolph/santa-chilly-solver/main/level.txt)
+genutzt werden, die das Level aus dem Santa-Chilly-Rätsel beschreibt.
+
+Mit
 
 ```shell
-./gradlew run
+bin/chilly
+```
+
+oder unter Windows
+
+```shell
+bin\chilly.bat
+```
+
+wird das Programm gestartet. Sofern eine ausführbare Datei `concorde` im `PATH` gefunden wird, wird diese mit der
+`chilly.tsp`-Datei gefüttert. Wenn alles gut geht, erscheint danach die Lösung in der Kommandozeilenausgabe.
+
+### Bauen und Ausführen des Programms
+
+Falls man beispielsweise mit den OR-Tools experimentieren möchte, sind Codeanpassungen erforderlich und das Projekt muss
+neu gebaut werden.
+
+Nach den Codeanpassungen kann es mit gradle gebaut und dann ausgeführt werden.
+
+Im System muss hierzu ein JDK 17 installiert sein. Gradle muss nicht installiert werden, da mit dem Projekt ein gradle
+wrapper ausgeliefert wird.
+
+Das Programm wird dann wie folgt gebaut und gestartet:
+
+```shell
+./gradlew run --quiet --console=plain
 ```
 
 Unter Windows:
 
 ```shell
-gradlew.bat run
+gradlew.bat run --quiet --console=plain
 ```
 
 ### Levelbeschreibung
