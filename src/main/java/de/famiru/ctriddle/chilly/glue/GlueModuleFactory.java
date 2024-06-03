@@ -8,6 +8,13 @@ public class GlueModuleFactory {
         };
     }
 
+    public TspSolverExecutor createTspSolverExecutor(GlueModuleType type) {
+        return switch (type) {
+            case CONCORDE -> new ConcordeTspSolverExecutor();
+            case OR_TOOLS -> new NoOpTspSolverExecutor();
+        };
+    }
+
     public TspSolverInput createTspSolverInput(GlueModuleType type) {
         return switch (type) {
             case CONCORDE -> new ConcordeTspSolverInput();

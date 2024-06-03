@@ -57,6 +57,7 @@ public class Main {
                 atspToTspTransformer.transformAtspToTsp(atspMatrix);
 
         glueModuleFactory.createTspSolverOutput(GLUE_MODULE_TYPE).output(transformedMatrix);
+        glueModuleFactory.createTspSolverExecutor(GLUE_MODULE_TYPE).execute();
 
         List<Integer> path = glueModuleFactory.createTspSolverInput(GLUE_MODULE_TYPE).readSolution();
 

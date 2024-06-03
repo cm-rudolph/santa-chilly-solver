@@ -37,6 +37,9 @@ class ConcordeTspSolverOutput extends FileBasedTspSolverOutput {
 
     @Override
     protected void instructUser() {
-        LOGGER.info("Please pass chilly.tsp to a solver able to handle files in TSPLIB format.");
+        if (!ConcordeDetector.isConcordePresent()) {
+            LOGGER.info("concorde has not been found in your PATH. Falling back to manual mode.");
+            LOGGER.info("Please pass chilly.tsp to a solver able to handle files in TSPLIB format.");
+        }
     }
 }

@@ -49,12 +49,19 @@ class ConcordeTspSolverInput implements TspSolverInput {
     }
 
     private void instructUser() {
+        if (solutionFileFound()) {
+            return;
+        }
         LOGGER.info("Place the solution as file chilly.sol into the working dir and press enter.");
         try {
             System.in.read();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    private boolean solutionFileFound() {
+        return Files.exists(Path.of("chilly.sol"));
     }
 
     private List<String> readFile() {
