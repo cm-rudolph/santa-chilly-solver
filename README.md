@@ -74,10 +74,9 @@ Das Ausführen des Programms erfordert ein im System installiertes JRE 17 oder h
 Die ausführbare Datei kann auf der
 [Release-Seite des Projektes](https://github.com/cm-rudolph/santa-chilly-solver/releases) heruntergeladen werden.
 
-Zunächst muss die .zip oder .tar-Datei entpackt werden. Außerdem muss eine `level.txt`-Datei im Ausführungsverzeichnis
-vorhanden sein. Wie diese Datei aufgebaut ist, ist weiter unten in diesem Dokument beschrieben. Alternativ kann auch die
-Datei [hier aus dem Repository](https://raw.githubusercontent.com/cm-rudolph/santa-chilly-solver/main/level.txt)
-genutzt werden, die das Level aus dem Santa-Chilly-Rätsel beschreibt.
+Zunächst muss die .zip oder .tar-Datei entpackt werden. Für alternative Problemstellungen muss die `level.txt`-Datei im
+Ausführungsverzeichnis noch angepasst werden. Wie diese Datei aufgebaut ist, ist weiter unten in diesem Dokument
+beschrieben.
 
 Mit
 

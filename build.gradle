@@ -25,6 +25,9 @@ java {
 
 application {
     mainClass = 'de.famiru.ctriddle.chilly.Main'
+
+    applicationDistribution.from('level.txt') {
+    }
 }
 
 run {
